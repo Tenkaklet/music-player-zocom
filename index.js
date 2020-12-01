@@ -25,7 +25,7 @@ let token = '';
 
 function playSong(song) {
     console.log('Selected song: ', song);
-    audio.src = song.preview_url;
+    audio.src = song;
     if(song === 'null') {
         audio.src = "https://p.scdn.co/mp3-preview/57eadd30537c7e457859ed589a67c304639a15ba?cid=4ba5c93a868a409599b12252bfad3d7e";
         audio.play();
@@ -56,15 +56,16 @@ async function getSongs(query) {
     console.log(data);
     for( let i = 0; i < data.tracks.items.length; i++) {
         const songItem = document.createElement('li');
+        songItem.className = 'play-song';
+        songItem.dataset.music = data.tracks.items[i].preview_url;
         songItem.innerHTML = `${data.tracks.items[i].name} <button class="play" data-song="${data.tracks.items[i].preview_url}">Play</button>`;
         lista.appendChild(songItem);
     }
 
-    const playButtons = document.getElementsByClassName('play');
+    const playButtons = document.getElementsByClassName('play-song');
     for(let i = 0; i < playButtons.length; i++) {
-        playButtons[i].addEventListener('click', event => {
-            console.log(event.target.dataset.song);
-            playSong(event.target.dataset.song);
+        playButtons[i].addEventListener('click', event => {            
+            playSong(event.target.dataset.music);
         });
     }
 
